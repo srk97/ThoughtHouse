@@ -6,7 +6,7 @@
 
     if (array_key_exists("logout", $_GET)) {
         
-        unset($_SESSION);
+        session_unset();
         setcookie("id", "", time() - 60*60);
         $_COOKIE["id"] = "";  
         
@@ -55,7 +55,7 @@
                     if (!mysqli_query($link, $query)) {
 
                         $error = "<p>Could not sign you up - please try again later.</p>";
-                        echo mysqli_errno($link) . ": " . mysqli_error($link) . "\n";
+                        
 
                     } else {
 
@@ -73,7 +73,7 @@
 
                         } 
                             
-                        header("Location: loggedinpage.php");
+                        header("Location: loggedinpage.php?id=".$_SESSION['id']."");
 
                     }
 
@@ -93,7 +93,10 @@
                         
                         if ($hashedPassword == $row['password']) {
                             
+                            //echo $row['id'];
                             $_SESSION['id'] = $row['id'];
+                            $_SESSION['kraken'] = $_SESSION['id'];
+                           // echo $_SESSION['id'];
                             
                             if ($_POST['stayLoggedIn'] == '1') {
 
@@ -101,7 +104,7 @@
 
                             } 
 
-                            header("Location: loggedinpage.php");
+                            header("Location: loggedinpage.php?id=".$_SESSION['id']."");
                                 
                         } else {
                             
